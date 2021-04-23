@@ -1,2 +1,2 @@
 # MIT_Driverless
-Personal repository of data, controllers, and analyses for MIT Driverless
+Personal development repository of data, controllers, and analyses for MIT Driverless
