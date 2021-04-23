@@ -5,7 +5,7 @@ close all; clc; clear all;
 numSolves = 1; % number of times to solve the kMPC problem (for solve times)
 generateSolver = true; % generates casadi solver, if not already compiled
 generateCode = false; % generates .c file if true
-makePlots = false; % plot results of solve
+makePlots = true; % plot results of solve
 
 %% Set problem parameters
 
@@ -25,6 +25,11 @@ X_path = [0,3,6,7.5,10,12,15,18];
 Y_path = [0, 0.25, 0.5, 0.75, 1, 0.75, 1, -0.5];
 V_path = [6, 6.5, 7, 7.5, 8, 8.5, 9, 9.5];
 
+% x_init = [0, 0, -pi/16, 67.260731, 0, 0.213181, 0, 0]'; % volatile path 
+% X_path = [0, 30, 60, 90, 120, 150, 180, 210];
+% Y_path = [0, -4, -8, -12, -16, -20, -24, -28];
+% V_path = [67, 67, 67, 67, 67, 67, 67, 67];
+
 path = spline_gen(X_path,Y_path,V_path);
 
 T = par.horizon;                    % time horizon
@@ -43,21 +48,26 @@ p = [path; x_init; u_init; x_upper; u_upper; x_lower; u_lower];
 
 %% Generate solver
 if generateSolver
-    solver = generatekMPC(generateCode);
+    solver = generate_kMPC(generateCode, par.horizon, par.steps);
 end
 
 %% Solve the NLP
-solver_compiled = casadi.nlpsol('solver_compiled', 'ipopt', './compiled/solver_kMPC.so');
-
-tic
+tic % solve in MATLAB
 for i=1:numSolves
-sol = solver_compiled('x0', repmat([x_init;u_init],[16,1]), 'ubx', [x_init; u_init; repmat([x_upper; u_upper],[15,1])],...
-    'lbx', [x_init; u_init; repmat([x_lower; u_lower],[15,1])], 'lbg', zeros(N*8,1), 'ubg', zeros(N*8,1), 'p', p);
+sol = solver('x0', repmat([x_init;u_init],[par.steps+1,1]), 'ubx', [x_init; u_init; repmat([x_upper; u_upper],[par.steps,1])],...
+    'lbx', [x_init; u_init; repmat([x_lower; u_lower],[par.steps,1])], 'lbg', zeros(N*8,1), 'ubg', zeros(N*8,1), 'p', p);
 end
-toc
+time_MATLAB = toc/numSolves;
+disp(['MATLAB average solve time: ', num2str(time_MATLAB), 's']);
 
-time_compiled = toc/numSolves;
-disp(['Compiled average solve time: ', num2str(time_compiled), 's']);
+% solver_compiled = casadi.nlpsol('solver_compiled', 'ipopt', './compiled/solver_kMPC.so'); % load compiled solver
+% tic
+% for i=1:numSolves
+% sol = solver_compiled('x0', repmat([x_init;u_init],[16,1]), 'ubx', [x_init; u_init; repmat([x_upper; u_upper],[15,1])],...
+%     'lbx', [x_init; u_init; repmat([x_lower; u_lower],[15,1])], 'lbg', zeros(N*8,1), 'ubg', zeros(N*8,1), 'p', p);
+% end
+% time_compiled = toc/numSolves;
+% disp(['Compiled average solve time: ', num2str(time_compiled), 's']);
 
 %solver.stats()
 w_opt = full(sol.x);
@@ -99,7 +109,7 @@ if (makePlots)
 
     figure(5)
     hold on
-    stairs(0:dt:T,steer_angle)
+    stairs(0:dt:T,rad2deg(steer_angle))
     xlabel('t'); ylabel('Steer angle');
     hold off
 

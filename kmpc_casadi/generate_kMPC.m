@@ -1,6 +1,4 @@
-function solver = generate_kMPC(generateCode)
-    clear all; close all; clc;
-
+function solver = generate_kMPC(generateCode, T, N)
     %addpath(genpath('casadi_linux/'))
     addpath(genpath('casadi_windows/'))
     addpath(genpath('utility/'))
@@ -12,9 +10,7 @@ function solver = generate_kMPC(generateCode)
     p = SX.sym('p',91+11+22);
 
     % load parameters
-    T = 3.0;                % time horizon
-    N = 15;                 % number of control intervals
-    dt = 0.2;               % time step 
+    dt = T/N;               % time step 
 
     path = p(1:91);         % path
     x_init = p(92:99);      % initial state

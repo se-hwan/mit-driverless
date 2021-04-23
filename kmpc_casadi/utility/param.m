@@ -2,9 +2,9 @@ classdef param
     
     properties
         %Problem Parameters
-            horizon = 3.0; %[s]
-            steps = 15; %[] steps of MPC
-            integrator_ts = 0.2; %[s] horizon/steps
+            horizon = 1.0; %[s]
+            steps = 20; %[] steps of MPC
+            integrator_ts = 0.05; %[s] horizon/steps
             integrator_nodes = 1; %[] nodes for each integrator_ts RK4
             path_len = 8; %[] nodes in spline path
             state_vars = 8; %[] length of state vector
