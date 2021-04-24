@@ -2,8 +2,8 @@ classdef param
     
     properties
         %Problem Parameters
-            horizon = 1.0; %[s]
-            steps = 20; %[] steps of MPC
+            horizon = 0.5; %[s]
+            steps = 10; %[] steps of MPC
             integrator_ts = 0.05; %[s] horizon/steps
             integrator_nodes = 1; %[] nodes for each integrator_ts RK4
             path_len = 8; %[] nodes in spline path
@@ -60,10 +60,10 @@ classdef param
             cw_speed = 2.0; %[] weight of speed down path
             %cw_ev = 3.0; %[] weight of velocity profile
             
-            cw_ev = 1.00; %[] weight of velocity profile
+            cw_ev = 10.00; %[] weight of velocity profile
 
             cw_control_lon = 1.0; %[] wieght of accel control
-            cw_control_lat = 5.0; % [] weight of steer rate control
+            cw_control_lat = 0.1; % [] weight of steer rate control
     end   
     
 end

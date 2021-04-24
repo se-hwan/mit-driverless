@@ -5,6 +5,7 @@ par = param;
 %Unpack Z
 x = z(1); %position
 y = z(2); %position
+psi = z(3); %car yaw
 vx = z(4); %velocity
 theta = z(7); %progress along path
 v_theta = z(9); %speed along path
@@ -38,10 +39,11 @@ phi = phi_lookup(theta,ax,bx,cx,ay,by,cy,theta_sp,pnts); %Angle of spline
 e_c = sin(phi)*(x-x_p) - cos(phi)*(y-y_p); % Cross-track error
 e_l = -cos(phi)*(x-x_p) - sin(phi)*(y-y_p); % Lag error
 e_v = vx - v_p; 
-c = par.cw_ec*e_c.^2 + par.cw_el*e_l.^2 + par.cw_ev*e_v^2  + par.cw_control_lon*accel^2 + par.cw_control_lat*twist^2; % Sum and weight 
+e_angle = psi - phi;
+c = par.cw_ec*e_c.^2 + par.cw_el*e_l.^2 + 100*e_angle.^2 + par.cw_ev*e_v^2 + par.cw_control_lon*accel^2 + par.cw_control_lat*twist^2; % Sum and weight 
 
 % this term used to be in the cost, but i think itd be screwy - sehwan
-% - par.cw_speed*v_theta
+%   - par.cw_speed*v_theta
 
 end
 
@@ -75,7 +77,7 @@ function p = phi_lookup(x,ax,bx,cx,ay,by,cy,t,pnts)
     dy_dt = dy_dt + high_pass(x,t(pnts)).*polyd(x,ay(pnts),by(pnts),cy(pnts),t(pnts));
     
     %Compute angle using derivatives
-    p = atan(dy_dt./dx_dt);
+    p = atan2(dy_dt, dx_dt);
 
 end
 

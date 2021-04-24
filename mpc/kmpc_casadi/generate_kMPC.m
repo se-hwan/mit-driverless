@@ -69,7 +69,6 @@ function solver = generate_kMPC(generateCode, T, N)
     ubw = [ubw, u_init'];
     w0 = [w0, u_init'];
 
-
     % Formulate the NLP
     for k = 0:N-1
         % Integrate till the end of the interval
