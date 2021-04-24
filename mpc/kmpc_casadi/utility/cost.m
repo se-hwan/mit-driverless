@@ -39,12 +39,8 @@ phi = phi_lookup(theta,ax,bx,cx,ay,by,cy,theta_sp,pnts); %Angle of spline
 e_c = sin(phi)*(x-x_p) - cos(phi)*(y-y_p); % Cross-track error
 e_l = -cos(phi)*(x-x_p) - sin(phi)*(y-y_p); % Lag error
 e_v = vx - v_p; 
-e_angle = psi - phi;
-c = par.cw_ec*e_c.^2 + par.cw_el*e_l.^2 + 100*e_angle.^2 + par.cw_ev*e_v^2 + par.cw_control_lon*accel^2 + par.cw_control_lat*twist^2; % Sum and weight 
-
-% this term used to be in the cost, but i think itd be screwy - sehwan
-%   - par.cw_speed*v_theta
-
+e_rot = psi - phi;
+c = par.cw_el*e_l.^2 + par.cw_ec*e_c.^2 + par.cw_rotation*e_rot.^2 + par.cw_ev*e_v^2 - par.cw_speed*v_theta + par.cw_control_lon*accel^2 + par.cw_control_lat*twist^2; % Sum and weight 
 end
 
 function y = spline_lookup(x,a,b,c,d,t,pnts)

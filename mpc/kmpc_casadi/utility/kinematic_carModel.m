@@ -4,7 +4,6 @@ function [x_dot] = kin_model(x,u)
 %z = [x u]
 
 %% MODEL
-
   %Create a param object
   p = param;
 
@@ -17,7 +16,10 @@ function [x_dot] = kin_model(x,u)
   steer_rate = u(3); %commanded steer rate
 
   %Compute slip angle
-  beta = atan( (tan(-steer)*p.lr) / (p.l));
+  beta = atan( (tan(-steer)*p.lr) / (p.l)); 
+  
+  % this is incredibly dangerous, driving vertically will cause blowup
+  % unknown/unexplored behavior for vertical orientation of car
 
   %Acceleration TODO: orient correctly
   a_x = accel * cos(beta);

@@ -1,7 +1,7 @@
 %% TEST kMPC NLP SOLUTION
 close all; clc; clear all;
 
-%addpath(genpath('casadi_linux/'))
+addpath(genpath('casadi_wi/'))
 addpath(genpath('casadi_windows/'))
 addpath(genpath('utility/'))
 addpath(genpath('compiled/'))

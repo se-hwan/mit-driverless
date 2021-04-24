@@ -29,7 +29,11 @@ classdef param
             rho = 1.225; %[kg/m^3] density of air
             
             %Steer column
-            max_steer_rate = 1.5; %[rad/s] max steering rate
+            % max_steer_rate = 1.5; %[rad/s] max steering rate, original,
+            % this is too low
+            max_steer_rate = 2.5; %[rad/s] max steering rate
+            % se hwan - this is what's limiting us from adjusting quickly
+            % enough
             
             %Tires
             slip_peak = 0.115; %[rad] round slip angles down to this, should be <2*slip_peak
@@ -55,15 +59,13 @@ classdef param
             max_mu_lat = 1.7;
             
        %Cost Function
-            cw_ec = 50.0; %[] cross-track-error weight
-            cw_el = 1.0; %[] lag error weight
+            cw_ec = 500.0; %[] cross-track-error weight
+            cw_el = 5.0; %[] lag error weight
             cw_speed = 2.0; %[] weight of speed down path
-            %cw_ev = 3.0; %[] weight of velocity profile
-            
-            cw_ev = 10.00; %[] weight of velocity profile
-
+            cw_ev = 1; %[] weight of velocity profile
             cw_control_lon = 1.0; %[] wieght of accel control
             cw_control_lat = 0.1; % [] weight of steer rate control
+            cw_rotation = 500; % [] weight of orientation error from path
     end   
     
 end
