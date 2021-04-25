@@ -3,8 +3,8 @@ classdef param
     properties
         %Problem Parameters
             horizon = 0.5; %[s]
-            steps = 10; %[] steps of MPC
-            integrator_ts = 0.05; %[s] horizon/steps
+            steps = 20; %[] steps of MPC
+            integrator_ts = 0.025; %[s] horizon/steps
             integrator_nodes = 1; %[] nodes for each integrator_ts RK4
             path_len = 8; %[] nodes in spline path
             state_vars = 8; %[] length of state vector
@@ -31,7 +31,7 @@ classdef param
             %Steer column
             % max_steer_rate = 1.5; %[rad/s] max steering rate, original,
             % this is too low
-            max_steer_rate = 2.5; %[rad/s] max steering rate
+            max_steer_rate = 2; %[rad/s] max steering rate
             % se hwan - this is what's limiting us from adjusting quickly
             % enough
             
@@ -59,13 +59,13 @@ classdef param
             max_mu_lat = 1.7;
             
        %Cost Function
-            cw_ec = 500.0; %[] cross-track-error weight
+            cw_ec = 50.0; %[] cross-track-error weight
             cw_el = 5.0; %[] lag error weight
             cw_speed = 2.0; %[] weight of speed down path
             cw_ev = 1; %[] weight of velocity profile
             cw_control_lon = 1.0; %[] wieght of accel control
-            cw_control_lat = 0.1; % [] weight of steer rate control
-            cw_rotation = 500; % [] weight of orientation error from path
+            cw_control_lat = 5; % [] weight of steer rate control
+            cw_rotation = 50; % [] weight of orientation error from path
     end   
     
 end

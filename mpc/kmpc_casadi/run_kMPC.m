@@ -4,6 +4,7 @@ close all; clc; clear all;
 %addpath(genpath('casadi_linux/'))
 addpath(genpath('casadi_windows/'))
 addpath(genpath('utility/'))
+addpath(genpath('data/'))
 addpath(genpath('compiled/'))
 
 %% Set flags
@@ -35,13 +36,13 @@ makePlots = true; % plot results of solve
 % Y_path = [0:7];
 % V_path = [5 5 5 5 5 5 5 5];
 
-% Path conditions from ROS bag
-x_init = [-87.723853, -2400.017734, -0.158900, 67.260731, 0, 0.213181, 0, 0.132529]'; % original
-u_init = [0 0 -.5]';
-X_path = [-87.899704, -82.964958, -78.022369, -73.072380, -68.115433, -63.151955, -58.182388, -53.207146];
-Y_path = [-2399.914307, -2400.692871, -2401.418701, -2402.093750, -2402.719727, -2403.297852, -2403.830078, -2404.318115];
-V_path = [97.2223, 97.2223, 97.2223, 97.2223, 97.2223, 97.2223, 97.2223, 97.2223];
-
+data_rosbags = rosbags();
+idx = 1;
+x_init = data_rosbags.x_init(:,idx);
+u_init = data_rosbags.u_init(:,idx);
+X_path = data_rosbags.X_path(:,idx)';
+Y_path = data_rosbags.Y_path(:,idx)';
+V_path = data_rosbags.V_path(:,idx)';
 
 path = spline_gen(X_path,Y_path,V_path);
 
@@ -110,7 +111,7 @@ if (makePlots)
     plot(x1_opt,x2_opt,'bo-')
     plot(X_path,Y_path,'r*')
     xlabel('X Position (m)'); ylabel('Y Position (m)');
-    %axis([0,20,-10,10])
+    %axis equal;
     hold off
 
     figure(3)
