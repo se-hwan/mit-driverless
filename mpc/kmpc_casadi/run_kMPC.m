@@ -1,8 +1,8 @@
 %% TEST kMPC NLP SOLUTION
 close all; clc; clear all;
 
-%addpath(genpath('casadi_linux/'))
-addpath(genpath('casadi_windows/'))
+addpath(genpath('casadi_linux/'))
+%addpath(genpath('casadi_windows/'))
 addpath(genpath('utility/'))
 addpath(genpath('data/'))
 addpath(genpath('compiled/'))
@@ -10,7 +10,7 @@ addpath(genpath('compiled/'))
 %% Set flags
 numSolves = 1; % number of times to solve the kMPC problem (for solve times)
 generateSolver = true; % generates casadi solver, if not already compiled
-generateCode = false; % generates .c file if true
+generateCode = true; % generates .c file if true
 makePlots = true; % plot results of solve
 
 %% Set problem parameters
